@@ -37,4 +37,11 @@ public interface BrandService {
      * @param brandId Integer Brand.id
      */
     void delete(Integer brandId);
+
+    /**
+     * 多条件搜索品牌
+     * @param brand
+     * @return
+     */
+    List<Brand> findList (Brand brand);
 }

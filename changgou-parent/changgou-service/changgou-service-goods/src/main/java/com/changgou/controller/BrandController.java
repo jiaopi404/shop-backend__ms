@@ -77,4 +77,10 @@ public class BrandController {
         brandService.delete(brandId);
         return new Result();
     }
+
+    @PostMapping(value = "/search")
+    public Result<List<Brand>> findList (@RequestBody Brand brand) {
+        List<Brand> b = brandService.findList(brand);
+        return new Result<>(true, StatusCode.OK, "查询成功", b);
+    }
 }
