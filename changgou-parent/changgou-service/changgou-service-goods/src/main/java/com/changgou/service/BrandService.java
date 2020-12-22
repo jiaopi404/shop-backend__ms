@@ -13,5 +13,28 @@ public interface BrandService {
      */
     List<Brand> findAll();
 
-    Brand findOneById(int id);
+    /**
+     * 根据 id 获取 brand
+     * @param id
+     * @return
+     */
+    Brand findById(int id);
+
+    /**
+     * 增
+     * @param brand Brand
+     */
+    int add(Brand brand);
+
+    /**
+     * 改
+     * @param brand
+     */
+    void update(Brand brand);
+
+    /**
+     * 删
+     * @param brandId Integer Brand.id
+     */
+    void delete(Integer brandId);
 }

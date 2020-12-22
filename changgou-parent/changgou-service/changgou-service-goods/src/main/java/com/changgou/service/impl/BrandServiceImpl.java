@@ -28,7 +28,35 @@ public class BrandServiceImpl implements BrandService {
      * @return
      */
     @Override
-    public Brand findOneById(int id) {
+    public Brand findById(int id) {
         return brandMapper.selectByPrimaryKey(id);
+    }
+
+    /**
+     * 添加品牌
+     * @param brand
+     * @return 创建的 id
+     */
+    @Override
+    public int add(Brand brand) {
+        return brandMapper.insert(brand);
+    }
+
+    /**
+     * 更新品牌
+     * @param brand
+     */
+    @Override
+    public void update(Brand brand) {
+        brandMapper.updateByPrimaryKey(brand);
+    }
+
+    /**
+     * 删除 品牌
+     * @param brandId Integer Brand.id
+     */
+    @Override
+    public void delete(Integer brandId) {
+        brandMapper.deleteByPrimaryKey(brandId);
     }
 }
