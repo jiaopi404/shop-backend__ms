@@ -21,4 +21,14 @@ public class BrandServiceImpl implements BrandService {
         // 查询所有 -> 通用Mapper.selectAll()
         return brandMapper.selectAll(); // BrandMapper 继承了通用 Mapper
     }
+
+    /**
+     * 根据 id 查询
+     * @param id
+     * @return
+     */
+    @Override
+    public Brand findOneById(int id) {
+        return brandMapper.selectByPrimaryKey(id);
+    }
 }

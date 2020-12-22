@@ -12,4 +12,6 @@ public interface BrandService {
      * @return
      */
     List<Brand> findAll();
+
+    Brand findOneById(int id);
 }
