@@ -2,6 +2,7 @@ package com.changgou.controller;
 
 import com.changgou.goods.pojo.Brand;
 import com.changgou.service.BrandService;
+import com.github.pagehelper.PageInfo;
 import entity.Result;
 import entity.StatusCode;
 import io.swagger.annotations.Api;
@@ -73,14 +74,25 @@ public class BrandController {
      * @return
      */
     @DeleteMapping(value = "/{id}")
+    @ApiOperation("删除品牌")
     public Result delete (@PathVariable("id") Integer brandId) {
         brandService.delete(brandId);
         return new Result();
     }
 
     @PostMapping(value = "/search")
+    @ApiOperation("多参数查询品牌")
     public Result<List<Brand>> findList (@RequestBody Brand brand) {
         List<Brand> b = brandService.findList(brand);
         return new Result<>(true, StatusCode.OK, "查询成功", b);
+    }
+
+    /**
+     * 分页查询实现
+     */
+    @GetMapping(value = "/search/{pageNum}/{pageSize}")
+    @ApiOperation("分页查询品牌")
+    public PageInfo<Brand> findPage (@PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize) {
+        return brandService.findPage(pageNum, pageSize);
     }
 }
