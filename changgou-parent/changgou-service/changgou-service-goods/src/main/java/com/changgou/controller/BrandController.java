@@ -95,4 +95,14 @@ public class BrandController {
     public PageInfo<Brand> findPage (@PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize) {
         return brandService.findPage(pageNum, pageSize);
     }
+
+    /**
+     * 多条件 + 分页 查询
+     */
+    @PostMapping(value = "/search/{pageNum}/{pageSize}")
+    @ApiOperation("品牌多条件 + 分页查询")
+    public PageInfo<Brand> findPage (@RequestBody Brand brand, @PathVariable("pageNum") Integer pageNum,
+                                     @PathVariable("pageSize") Integer pageSize) {
+        return brandService.findPage(brand, pageNum, pageSize);
+    }
 }

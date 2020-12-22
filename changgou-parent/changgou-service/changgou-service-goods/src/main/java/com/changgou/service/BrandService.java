@@ -47,9 +47,14 @@ public interface BrandService {
     List<Brand> findList (Brand brand);
 
     /**
-     * 条件搜索
+     * 分页
      * @param pageNum 分页
      * @param pageSize 分页
      */
     PageInfo<Brand> findPage (Integer pageNum, Integer pageSize);
+
+    /**
+     * 条件 + 分页 查询
+     */
+    PageInfo<Brand> findPage (Brand brand, Integer pageNum, Integer pageSize);
 }

@@ -91,7 +91,23 @@ public class BrandServiceImpl implements BrandService {
         PageHelper.startPage(pageNum, pageSize);
 
         List<Brand> brandList = brandMapper.selectAll();
-        return new PageInfo<Brand>(brandList);
+        return new PageInfo<>(brandList);
+    }
+
+    /**
+     * 条件 + 分页 查询
+     * @param brand
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PageInfo<Brand> findPage(Brand brand, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+
+        Example example = createExample(brand);
+        List<Brand> brandListByExample = brandMapper.selectByExample(example);
+        return new PageInfo<>(brandListByExample);
     }
 
     public Example createExample (Brand brand) {
