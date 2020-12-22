@@ -1,6 +1,7 @@
 package com.changgou.dao;
 
 import com.changgou.goods.pojo.Brand;
+import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
 
 /**
@@ -12,5 +13,6 @@ import tk.mybatis.mapper.common.Mapper;
  *   查询: Mapper.selectByPrimaryKey(id)
  *   条件查询: Mapper.select(T) // T JavaBean 对象
  */
+@Repository
 public interface BrandMapper extends Mapper<Brand> {
 }
