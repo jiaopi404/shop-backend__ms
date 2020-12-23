@@ -24,6 +24,7 @@ public class BrandController {
     @GetMapping
     @ApiOperation("查询所有品牌")
     public Result<List<Brand>> findAll() {
+        int i = 100 / 0;
         // 查询所有品牌
         List<Brand> brandList = brandService.findAll();
         // 响应结果封装
