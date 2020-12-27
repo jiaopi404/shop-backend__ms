@@ -2,11 +2,12 @@ package com.changgou.util;
 
 import com.changgou.file.FastDFSFile;
 import org.csource.common.NameValuePair;
-import org.csource.fastdfs.ClientGlobal;
-import org.csource.fastdfs.StorageClient;
-import org.csource.fastdfs.TrackerClient;
-import org.csource.fastdfs.TrackerServer;
+import org.csource.fastdfs.*;
 import org.springframework.core.io.ClassPathResource;
+
+import java.io.ByteArrayInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
 /**
  * 实现 FastDFS 文件操作;
@@ -58,5 +59,58 @@ public class FastDFSUtil {
          * <ul><li>results[1]: the new created filename</li></ul> M00/02/44/kldsfdlk.jpg
          */
         return storageClient.upload_file(file.getContent(), file.getExt(), meta_list);
+    }
+
+    /**
+     * 获取文件信息; 文件在 Storage 中, 也要走一遍流程
+     * @param groupName 组名
+     * @param remoteFileName 文件的存储路径名字 M00/02/44/kldsfdlk.jpg
+     */
+    public static FileInfo getFile (String groupName, String remoteFileName) throws Exception {
+        // 创建 TrackerClient 通过 TrackerClient 对象返回 TrackerServer
+        TrackerClient trackerClient = new TrackerClient();
+
+        // 通过TrackerClient 获取 TrackerServer 的连接对象
+        TrackerServer trackerServer = trackerClient.getConnection();
+
+        // 通过 TrackerServer 获取 Storage 信息, 创建 StorageClient 对象存储 Storage 信息
+        StorageClient storageClient = new StorageClient(trackerServer, null);
+
+        // 获取文件信息
+        return storageClient.get_file_info(groupName, remoteFileName);
+    }
+
+    /**
+     * 下载文件信息
+     * @param groupName 组名
+     * @param remoteFileName 文件的存储路径名字
+     */
+    public static InputStream downloadFile (String groupName, String remoteFileName) throws Exception {
+        TrackerClient trackerClient = new TrackerClient();
+        TrackerServer trackerServer = trackerClient.getConnection();
+        StorageClient storageClient = new StorageClient(trackerServer, null);
+
+        byte[] downloadContent = storageClient.download_file(groupName, remoteFileName);
+
+        return new ByteArrayInputStream(downloadContent);
+    }
+
+    public static void main(String[] args) throws Exception {
+        // 测试获取文件信息
+//        FileInfo fileInfo = getFile("group1", "M00/00/00/rBTTlV_oaOKAbU9HAAL7OvCscVY617.jpg");
+//        System.out.println(fileInfo.toString());
+
+        // 测试下载文件
+        InputStream is = downloadFile("group1", "M00/00/00/rBTTlV_oaOKAbU9HAAL7OvCscVY617.jpg");
+
+        FileOutputStream fos = new FileOutputStream("/Users/jiaopi404/Desktop/tmp/1.jpg");
+        // 创建字节缓冲区
+        byte[] buffer = new byte[1024];
+        while (is.read(buffer) != -1) {
+            fos.write(buffer);
+        }
+        fos.flush(); // 清空缓冲区;
+        fos.close();
+        is.close();
     }
 }
