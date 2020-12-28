@@ -94,6 +94,60 @@ public class FastDFSUtil {
         return new ByteArrayInputStream(downloadContent);
     }
 
+    /**
+     * 文件删除
+     * @param groupName 组名
+     * @param remoteFileName 文件的存储路径名字
+     * @throws Exception 异常
+     */
+    public static void deleteFile (String groupName, String remoteFileName) throws Exception {
+        TrackerClient trackerClient = new TrackerClient();
+        TrackerServer trackerServer = trackerClient.getConnection();
+        StorageClient storageClient = new StorageClient(trackerServer, null);
+
+        storageClient.delete_file(groupName, remoteFileName);
+    }
+
+    /**
+     * 获取 storage 信息
+     * @return StorageServer
+     * @throws Exception 异常
+     */
+    public static StorageServer getStorage () throws Exception {
+        TrackerClient trackerClient = new TrackerClient();
+        TrackerServer trackerServer = trackerClient.getConnection();
+        return trackerClient.getStoreStorage(trackerServer);
+    }
+
+    /**
+     * 获取 storage 的 ip 和 端口信息
+     * @param groupName 组名
+     * @param remoteFileName 文件的存储路径名
+     * @return ServerInfo[] server 组
+     * @throws Exception 异常
+     */
+    public static ServerInfo[] getServerInfo (String groupName, String remoteFileName) throws Exception {
+        // 获取 storage 的 ip 和端口信息
+        TrackerClient trackerClient = new TrackerClient();
+        TrackerServer trackerServer = trackerClient.getConnection();
+        return trackerClient.getFetchStorages(trackerServer, groupName, remoteFileName);
+    }
+
+    /**
+     * 获取 tracker 信息
+     * @return 返回路径
+     * @throws Exception 异常
+     */
+    public static String getTrackerInfo () throws Exception {
+        TrackerClient trackerClient = new TrackerClient();
+        TrackerServer trackerServer = trackerClient.getConnection();
+        // 获取 配置文件中的 port 配置
+        int tracker_http_port = ClientGlobal.getG_tracker_http_port();
+        String hostname = trackerServer.getInetSocketAddress().getHostString();
+        System.out.println(trackerServer.getInetSocketAddress().getPort());
+        return "http://" + hostname + ":" + tracker_http_port;
+    }
+
     public static void main(String[] args) throws Exception {
         // =============== 测试上传文件
 //        // 读取文件内容
@@ -131,5 +185,22 @@ public class FastDFSUtil {
 //        fos.flush(); // 清空缓冲区;
 //        fos.close();
 //        is.close();
+
+        // ========== 获取 storage 信息
+//        StorageServer storageServer = getStorage();
+//        System.out.println(storageServer.getInetSocketAddress().getHostName()); // 47.108.156.216
+//        System.out.println(storageServer.getInetSocketAddress().getAddress()); // 47.108.156.216/47.108.156.216
+//        System.out.println(storageServer.getInetSocketAddress().getHostString()); // 47.108.156.216
+
+        // =========== 获取 storage 组 的 ip 和端口信息;
+//        ServerInfo[] serverInfos = getServerInfo("group1", "M00/00/00/rBTTlV_oaOKAbU9HAAL7OvCscVY617.jpg");
+//        for (ServerInfo serverInfo:serverInfos) {
+//            System.out.println(serverInfo.getIpAddr());
+//            System.out.println(serverInfo.getPort());
+//        }
+
+        // ============ 测试获取 trackerInfo
+        String trackerUrl = getTrackerInfo();
+        System.out.println(trackerUrl);
     }
 }
