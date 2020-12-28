@@ -6,7 +6,6 @@ import org.csource.fastdfs.*;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 
 /**
@@ -96,21 +95,41 @@ public class FastDFSUtil {
     }
 
     public static void main(String[] args) throws Exception {
-        // 测试获取文件信息
+        // =============== 测试上传文件
+//        // 读取文件内容
+//        File file = new File("/Users/jiaopi404/Desktop/tmp/banner_1_3x.png");
+//        InputStream is = new FileInputStream(file);
+//        byte[] buffer = new byte[(int) file.length()]; // 创建数组
+//        int offset = 0; // 偏移量
+//        int numRead = 0; // 已读量
+//        while (offset < buffer.length && (numRead = is.read(buffer, offset, buffer.length - offset)) >= 0) { // 读取
+//            offset += numRead;
+//        }
+//        is.close(); // 关闭读取流
+//        // 构造上传文件
+//        FastDFSFile fastDFSFile = new FastDFSFile();
+//        fastDFSFile.setName("测试上传文件");
+//        fastDFSFile.setExt(StringUtils.getFilenameExtension(file.getName()));
+//        fastDFSFile.setContent(buffer);
+//        String[] uploads = upload(fastDFSFile);
+//        System.out.println("上传成功， 返回： " + uploads[0] + "/" + uploads[1]);
+
+
+        // =============== 测试获取文件信息
 //        FileInfo fileInfo = getFile("group1", "M00/00/00/rBTTlV_oaOKAbU9HAAL7OvCscVY617.jpg");
 //        System.out.println(fileInfo.toString());
 
-        // 测试下载文件
-        InputStream is = downloadFile("group1", "M00/00/00/rBTTlV_oaOKAbU9HAAL7OvCscVY617.jpg");
-
-        FileOutputStream fos = new FileOutputStream("/Users/jiaopi404/Desktop/tmp/1.jpg");
-        // 创建字节缓冲区
-        byte[] buffer = new byte[1024];
-        while (is.read(buffer) != -1) {
-            fos.write(buffer);
-        }
-        fos.flush(); // 清空缓冲区;
-        fos.close();
-        is.close();
+        // =============== 测试下载文件
+//        InputStream is = downloadFile("group1", "M00/00/00/rBTTlV_oaOKAbU9HAAL7OvCscVY617.jpg");
+//
+//        FileOutputStream fos = new FileOutputStream("/Users/jiaopi404/Desktop/tmp/1.jpg");
+//        // 创建字节缓冲区
+//        byte[] buffer = new byte[1024];
+//        while (is.read(buffer) != -1) {
+//            fos.write(buffer);
+//        }
+//        fos.flush(); // 清空缓冲区;
+//        fos.close();
+//        is.close();
     }
 }
