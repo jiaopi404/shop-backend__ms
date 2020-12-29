@@ -66,14 +66,15 @@ public class FastDFSUtil {
      * @param remoteFileName 文件的存储路径名字 M00/02/44/kldsfdlk.jpg
      */
     public static FileInfo getFile (String groupName, String remoteFileName) throws Exception {
-        // 创建 TrackerClient 通过 TrackerClient 对象返回 TrackerServer
-        TrackerClient trackerClient = new TrackerClient();
-
-        // 通过TrackerClient 获取 TrackerServer 的连接对象
-        TrackerServer trackerServer = trackerClient.getConnection();
-
-        // 通过 TrackerServer 获取 Storage 信息, 创建 StorageClient 对象存储 Storage 信息
-        StorageClient storageClient = new StorageClient(trackerServer, null);
+//        // 创建 TrackerClient 通过 TrackerClient 对象返回 TrackerServer
+//        TrackerClient trackerClient = new TrackerClient();
+//
+//        // 通过TrackerClient 获取 TrackerServer 的连接对象
+//        TrackerServer trackerServer = trackerClient.getConnection();
+//
+//        // 通过 TrackerServer 获取 Storage 信息, 创建 StorageClient 对象存储 Storage 信息
+//        StorageClient storageClient = new StorageClient(trackerServer, null);
+        StorageClient storageClient = getStorageClient();
 
         // 获取文件信息
         return storageClient.get_file_info(groupName, remoteFileName);
@@ -85,9 +86,7 @@ public class FastDFSUtil {
      * @param remoteFileName 文件的存储路径名字
      */
     public static InputStream downloadFile (String groupName, String remoteFileName) throws Exception {
-        TrackerClient trackerClient = new TrackerClient();
-        TrackerServer trackerServer = trackerClient.getConnection();
-        StorageClient storageClient = new StorageClient(trackerServer, null);
+        StorageClient storageClient = getStorageClient();
 
         byte[] downloadContent = storageClient.download_file(groupName, remoteFileName);
 
@@ -101,9 +100,7 @@ public class FastDFSUtil {
      * @throws Exception 异常
      */
     public static void deleteFile (String groupName, String remoteFileName) throws Exception {
-        TrackerClient trackerClient = new TrackerClient();
-        TrackerServer trackerServer = trackerClient.getConnection();
-        StorageClient storageClient = new StorageClient(trackerServer, null);
+        StorageClient storageClient = getStorageClient();
 
         storageClient.delete_file(groupName, remoteFileName);
     }
@@ -139,13 +136,31 @@ public class FastDFSUtil {
      * @throws Exception 异常
      */
     public static String getTrackerInfo () throws Exception {
-        TrackerClient trackerClient = new TrackerClient();
-        TrackerServer trackerServer = trackerClient.getConnection();
+        TrackerServer trackerServer = getTrackerServer();
         // 获取 配置文件中的 port 配置
         int tracker_http_port = ClientGlobal.getG_tracker_http_port();
         String hostname = trackerServer.getInetSocketAddress().getHostString();
         System.out.println(trackerServer.getInetSocketAddress().getPort());
         return "http://" + hostname + ":" + tracker_http_port;
+    }
+
+    /**
+     * 获取 trackerServer
+     * @return TrackerServer
+     * @throws Exception
+     */
+    public static TrackerServer getTrackerServer () throws Exception {
+        TrackerClient trackerClient = new TrackerClient();
+        return trackerClient.getConnection();
+    }
+
+    /**
+     * 获取 storageClient
+     * @return StorageClient
+     * @throws Exception
+     */
+    public static StorageClient getStorageClient () throws Exception {
+        return new StorageClient(getTrackerServer(), null);
     }
 
     public static void main(String[] args) throws Exception {
