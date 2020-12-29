@@ -3,8 +3,8 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
-    application:
-      name: file
+  application:
+    name: file
 server:
   port: 18082
 eureka:
