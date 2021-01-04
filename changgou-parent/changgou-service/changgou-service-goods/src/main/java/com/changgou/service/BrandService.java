@@ -6,6 +6,12 @@ import com.github.pagehelper.PageInfo;
 import java.util.List;
 
 public interface BrandService {
+
+    /**
+     * 根据 分类id 查询品牌集合
+     */
+    List<Brand> findBrandByCategoryId(Integer categoryId);
+
     // 不需要写 DAO, 直接写 service
 
     /**

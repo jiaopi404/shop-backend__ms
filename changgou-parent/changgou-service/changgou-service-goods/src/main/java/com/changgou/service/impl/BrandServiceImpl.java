@@ -16,6 +16,18 @@ import java.util.List;
 public class BrandServiceImpl implements BrandService {
     @Autowired
     private BrandMapper brandMapper;
+
+    /**
+     * 根据 分类id 查询 brand 集合
+     * @param categoryId 分类id
+     * @return
+     */
+    @Override
+    public List<Brand> findBrandByCategoryId(Integer categoryId) {
+        // 调用 dao 层查询方法；
+        return brandMapper.findBrandByCategoryId(categoryId);
+    }
+
     /**
      * 查询所有
      * @return

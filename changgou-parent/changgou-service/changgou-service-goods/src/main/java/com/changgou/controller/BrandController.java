@@ -21,6 +21,17 @@ public class BrandController {
     @Autowired
     private BrandService brandService;
 
+    /**
+     * 根据分类 id 查询品牌集合
+     * @return
+     */
+    @GetMapping("/category/{categoryId}")
+    @ApiOperation("根据分类 id 查询品牌集合")
+    public Result<List<Brand>> findBrandByCategoryId (@PathVariable("categoryId") Integer categoryId) {
+        List<Brand> brands = brandService.findBrandByCategoryId(categoryId);
+        return new Result<>(true, StatusCode.OK, "根据分类 id 查询 brand 集合，分类id: " + categoryId, brands);
+    }
+
     @GetMapping
     @ApiOperation("查询所有品牌")
     public Result<List<Brand>> findAll() {
