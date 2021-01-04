@@ -20,6 +20,20 @@ public class SpecController {
     @Autowired
     private SpecService specService;
 
+    /**
+     * 根据 分类id 查询 规格集合；category -> template_id -> specs
+     * @param categoryId
+     * @return
+     */
+    @GetMapping("/category/{categoryId}")
+    @ApiOperation("根据 分类id 查询 规格集合；category -> template_id -> specs")
+    public Result<List<Spec>> findSpecByCategoryId (@PathVariable("categoryId") Integer categoryId) {
+        return new Result<>(true,
+                StatusCode.OK,
+                "根据 分类id 查询 规格集合；category -> template_id -> specs 成功！！",
+                specService.findSpecByCategoryId(categoryId));
+    }
+
     @PostMapping(value = "/add")
     @ApiOperation("添加规格")
     public Result add (@RequestBody Spec spec) {

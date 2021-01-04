@@ -6,6 +6,14 @@ import com.github.pagehelper.PageInfo;
 import java.util.List;
 
 public interface SpecService {
+
+    /**
+     * 根据 分类id 查询 规格集合；category -> template_id -> specs
+     * @param categoryId 分类id
+     * @return
+     */
+    List<Spec> findSpecByCategoryId (Integer categoryId);
+
     /**
      * add
      */

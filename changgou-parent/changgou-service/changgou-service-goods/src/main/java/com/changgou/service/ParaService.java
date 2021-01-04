@@ -6,6 +6,14 @@ import com.github.pagehelper.PageInfo;
 import java.util.List;
 
 public interface ParaService {
+
+    /**
+     * 根据 分类id 查询 参数集合；category -> template_id -> params
+     * @param categoryId 分类 id
+     * @return
+     */
+    List<Para> findParaByCategoryId (Integer categoryId);
+
     /**
      * add
      */

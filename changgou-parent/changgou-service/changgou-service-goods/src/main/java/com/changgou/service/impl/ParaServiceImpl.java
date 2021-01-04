@@ -1,7 +1,9 @@
 package com.changgou.service.impl;
 
+import com.changgou.dao.CategoryMapper;
 import com.changgou.dao.ParaMapper;
 import com.changgou.dao.TemplateMapper;
+import com.changgou.goods.pojo.Category;
 import com.changgou.goods.pojo.Para;
 import com.changgou.goods.pojo.Template;
 import com.changgou.service.ParaService;
@@ -21,6 +23,9 @@ public class ParaServiceImpl implements ParaService {
 
     @Autowired
     private TemplateMapper templateMapper;
+
+    @Autowired
+    private CategoryMapper categoryMapper;
     /**
      * 查询所有
      * @return
@@ -39,6 +44,19 @@ public class ParaServiceImpl implements ParaService {
     @Override
     public Para findById(Integer id) {
         return paraMapper.selectByPrimaryKey(id);
+    }
+
+    /**
+     * 根据 分类id 查询 参数集合；category -> template_id -> params
+     * @param categoryId 分类 id
+     * @return
+     */
+    @Override
+    public List<Para> findParaByCategoryId(Integer categoryId) {
+        Category category = categoryMapper.selectByPrimaryKey(categoryId);
+        Para para = new Para();
+        para.setTemplateId(category.getTemplateId());
+        return paraMapper.select(para);
     }
 
     /**

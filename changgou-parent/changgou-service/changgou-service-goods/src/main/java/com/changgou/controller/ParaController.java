@@ -20,6 +20,20 @@ public class ParaController {
     @Autowired
     private ParaService paraService;
 
+    /**
+     * 根据 分类id 查询 参数集合；category -> template_id -> params
+     */
+    @GetMapping("/category/{categoryId}")
+    @ApiOperation("根据 分类id 查询 参数集合；category -> template_id -> params")
+    public Result<List<Para>> findParaByCategoryId (@PathVariable("categoryId") Integer categoryId) {
+        return new Result<>(
+                true,
+                StatusCode.OK,
+                "根据 分类id 查询 参数集合；category -> template_id -> params 成功！",
+                paraService.findParaByCategoryId(categoryId)
+        );
+    }
+
     @PostMapping(value = "/add")
     @ApiOperation("添加参数")
     public Result add (@RequestBody Para para) {
