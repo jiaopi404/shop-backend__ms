@@ -48,7 +48,7 @@ public interface CategoryService {
 
     /**
      * findByParentId 根据目录父 id 查找目录(上级id)
-     * @param parentId
+     * @param parentId 父节点 id; 一级分类为 0
      * @return
      */
     List<Category> findByParentId (Integer parentId);

@@ -113,6 +113,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> findByParentId(Integer parentId) {
+        // 根据父id 进行查询 select * from tb_category where parent_id=#{parentId}
+        // MyBatis 支持条件查询，使用如下
+        // 封装一个 JavaBean, 如果该 bean 指定属性不为空，则将指定属性作为查询条件；
         Category category = new Category();
         category.setParentId(parentId);
         return categoryMapper.select(category);

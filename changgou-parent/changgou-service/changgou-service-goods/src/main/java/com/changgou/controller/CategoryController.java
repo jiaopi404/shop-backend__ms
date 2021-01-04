@@ -76,8 +76,9 @@ public class CategoryController {
         return new Result<>(true, StatusCode.OK, "查找成功", categoryService.findPage(category, pageNum, pageSize));
     }
 
-    @PostMapping(value = "/list/{parentId}")
+    @GetMapping(value = "/list/{parentId}")
+    @ApiOperation("根据 父id 查询 子节点")
     public Result<List<Category>> findByParentId (@PathVariable("parentId") Integer parentId) {
-        return new Result<>(true, StatusCode.OK, "查找成功", categoryService.findByParentId(parentId));
+        return new Result<>(true, StatusCode.OK, "根据父节点查询子节点成功", categoryService.findByParentId(parentId));
     }
 }
