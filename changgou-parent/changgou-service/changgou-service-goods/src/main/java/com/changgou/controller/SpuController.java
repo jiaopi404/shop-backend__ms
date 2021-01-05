@@ -1,5 +1,6 @@
 package com.changgou.controller;
 
+import com.changgou.goods.pojo.Goods;
 import com.changgou.goods.pojo.Spu;
 import com.changgou.service.SpuService;
 import com.github.pagehelper.PageInfo;
@@ -24,6 +25,26 @@ public class SpuController {
 
     @Autowired
     private SpuService spuService;
+
+    /**
+     * 根据 spuId 查询 goods
+     * @return
+     */
+    @GetMapping("/goods/{spuId}")
+    @ApiOperation(value = "根据 spuId 查询商品",notes = "根据 spuId 查询商品",tags = {"SpuController"})
+    public Result<Goods> findGoodsBySpuId (@PathVariable("spuId") Long spuId) {
+        Goods goods = spuService.findGoodsBySpuId(spuId);
+        return new Result<>(true, StatusCode.OK, "查询商品成功", goods);
+    }
+
+    @PostMapping("/save")
+    @ApiOperation(value = "保存商品",notes = "商品保存接口",tags = {"SpuController"})
+    public Result saveGoods (@RequestBody Goods goods) {
+        spuService.saveGoods(goods);
+        Spu spu = goods.getSpu();
+        String msg = spu.getId() == null ? "保存成功" : "修改成功";
+        return new Result(true, StatusCode.OK, msg);
+    }
 
     /***
      * Spu分页条件搜索实现
