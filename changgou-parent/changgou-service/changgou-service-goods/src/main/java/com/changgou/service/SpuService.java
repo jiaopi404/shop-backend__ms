@@ -14,6 +14,43 @@ import java.util.List;
 public interface SpuService {
 
     /**
+     *
+     * @param spuIds
+     * @param isReal 是否物理删除；false 非 true 是
+     */
+    void deleteMany(Long[] spuIds, Boolean isReal);
+
+    /**
+     * 批量下架
+     * @param spuIds
+     */
+    void pullMany(Long[] spuIds);
+
+    /**
+     * 批量上架
+     * @param spuIds
+     */
+    void putMany(Long[] spuIds);
+
+    /**
+     * 上架
+     * @param spuId
+     */
+    void put (Long spuId);
+
+    /**
+     * 下架
+     * @param spuId
+     */
+    void pull (Long spuId);
+
+    /**
+     * 审核
+     * @param spuId
+     */
+    void audit (Long spuId);
+
+    /**
      * 根据 spuId 查询 goods
      * @param spuId spuId
      * @return

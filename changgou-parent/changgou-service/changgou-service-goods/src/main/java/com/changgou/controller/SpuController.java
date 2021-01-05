@@ -27,6 +27,79 @@ public class SpuController {
     private SpuService spuService;
 
     /**
+     *
+     * @param spuIds
+     * @param isReal
+     * @return
+     */
+    @DeleteMapping("/delete")
+    @ApiOperation(value = "根据 spuIds 批量删除商品",notes = "批量删除",tags = {"SpuController"})
+    public Result deleteMany (@RequestBody Long[] spuIds, @RequestParam("isReal") Boolean isReal) {
+        spuService.deleteMany(spuIds, isReal);
+        return new Result(true, StatusCode.OK, "删除成功, " + (isReal ? "真删" : "假删"));
+    }
+
+    /**
+     * 批量下架
+     * @param spuIds
+     * @return
+     */
+    @PutMapping("/pull")
+    @ApiOperation(value = "根据 spuIds 批量下架商品",notes = "下架商品",tags = {"SpuController"})
+    public Result pullMany (@RequestBody Long[] spuIds) {
+        spuService.pullMany(spuIds);
+        return new Result(true, StatusCode.OK, "批量下架成功");
+    }
+
+    /**
+     * 批量上架
+     * @param spuIds
+     * @return
+     */
+    @PutMapping("/put")
+    @ApiOperation(value = "根据 spuIds 批量上架商品",notes = "上架商品",tags = {"SpuController"})
+    public Result putMany (@RequestBody Long[] spuIds) {
+        spuService.putMany(spuIds);
+        return new Result(true, StatusCode.OK, "批量上架成功");
+    }
+
+    /**
+     * 上架商品
+     * @param spuId
+     * @return
+     */
+    @PutMapping("/put/{spuId}")
+    @ApiOperation(value = "根据 spuId 上架商品",notes = "上架商品",tags = {"SpuController"})
+    public Result put (@PathVariable("spuId") Long spuId) {
+        spuService.put(spuId);
+        return new Result(true, StatusCode.OK, "上架成功");
+    }
+
+    /**
+     * 下架商品
+     * @param spuId
+     * @return
+     */
+    @PutMapping("/pull/{spuId}")
+    @ApiOperation(value = "根据 spuId 下架商品",notes = "下架商品",tags = {"SpuController"})
+    public Result pull (@PathVariable("spuId") Long spuId) {
+        spuService.pull(spuId);
+        return new Result(true, StatusCode.OK, "下架成功");
+    }
+
+    /**
+     * 审核商品
+     * @param spuId
+     * @return
+     */
+    @PutMapping("/audit/{spuId}")
+    @ApiOperation(value = "根据 spuId 审核商品",notes = "审核商品",tags = {"SpuController"})
+    public Result audit (@PathVariable("spuId") Long spuId) {
+        spuService.audit(spuId);
+        return new Result(true, StatusCode.OK, "审核成功");
+    }
+
+    /**
      * 根据 spuId 查询 goods
      * @return
      */

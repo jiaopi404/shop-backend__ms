@@ -1,7 +1,6 @@
 package com.changgou.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.changgou.dao.BrandMapper;
 import com.changgou.dao.CategoryMapper;
 import com.changgou.dao.SkuMapper;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +44,122 @@ public class SpuServiceImpl implements SpuService {
     @Autowired
     private BrandMapper brandMapper;
 
+    /**
+     * 删除，区分是否物理删除
+     * @param spuIds spu ids
+     * @param isReal 是否物理删除；false 非 true 是
+     */
+    @Override
+    public void deleteMany(Long[] spuIds, Boolean isReal) {
+        Example example = new Example(Spu.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andIn("id", Arrays.asList(spuIds));
+        if (isReal) { // 物理删除
+            spuMapper.deleteByExample(example);
+        } else {
+            Spu spu = new Spu();
+            spu.setIsDelete("1");
+            spuMapper.updateByExampleSelective(spu, example);
+        }
+    }
+
+    /**
+     * 批量下架
+     * @param spuIds spu ids
+     */
+    @Override
+    public void pullMany(Long[] spuIds) {
+        // sql
+        // update tb_spu set isMarketable=1 where id in(spuIds) and is_delete=0 and status=1
+        // 构建条件 Example
+        Example example = new Example(Spu.class);
+        Example.Criteria criteria = example.createCriteria();
+        // id in spuIds
+        criteria.andIn("id", Arrays.asList(spuIds)); // 数组转为 集合；
+        // isDelete = 0
+        criteria.andEqualTo("isDelete", "0");
+        Spu spu = new Spu();
+        spu.setIsMarketable("0");
+        int i = spuMapper.updateByExampleSelective(spu, example); // i 操作的行数（无论值是否已经是期望值）
+        if (i == 0) {
+            throw new RuntimeException("并没有查询到要修改的行，请确认检索条件！");
+        }
+    }
+
+    /**
+     * 批量上架
+     * @param spuIds spu ids
+     */
+    @Override
+    public void putMany(Long[] spuIds) {
+        // sql
+        // update tb_spu set isMarketable=1 where id in(spuIds) and is_delete=0 and status=1
+        // 构建条件 Example
+        Example example = new Example(Spu.class);
+        Example.Criteria criteria = example.createCriteria();
+        // id in spuIds
+        criteria.andIn("id", Arrays.asList(spuIds)); // 数组转为 集合；
+        // isDelete = 0
+        criteria.andEqualTo("isDelete", "0");
+        // status = 1
+        criteria.andEqualTo("status", "1");
+        Spu spu = new Spu();
+        spu.setIsMarketable("1");
+        int i = spuMapper.updateByExampleSelective(spu, example); // i 操作的行数（无论值是否已经是期望值）
+        if (i == 0) {
+            throw new RuntimeException("并没有查询到要修改的行，请确认检索条件！");
+        }
+    }
+
+    /**
+     * 上架
+     * @param spuId
+     */
+    @Override
+    public void put(Long spuId) {
+        Spu spu = spuMapper.selectByPrimaryKey(spuId);
+        // 判断是否已删除
+        if (spu.getIsDelete().equalsIgnoreCase("1")) { // 1 已删除
+            throw new RuntimeException("商品已删除，不允许上架");
+        }
+        if (spu.getStatus().equalsIgnoreCase("0")) { // 1 已删除
+            throw new RuntimeException("商品未审核，不允许上架");
+        }
+        spu.setIsMarketable("1");
+        spuMapper.updateByPrimaryKeySelective(spu);
+    }
+
+
+    /**
+     * 下架
+     * @param spuId
+     */
+    @Override
+    public void pull(Long spuId) {
+        Spu spu = spuMapper.selectByPrimaryKey(spuId);
+        // 判断是否已删除
+        if (spu.getIsDelete().equalsIgnoreCase("1")) { // 1 已删除
+            throw new RuntimeException("商品已删除，不允许下架");
+        }
+        spu.setIsMarketable("0");
+        spuMapper.updateByPrimaryKeySelective(spu);
+    }
+
+    /**
+     * 审核
+     * @param spuId
+     */
+    @Override
+    public void audit(Long spuId) {
+        Spu spu = spuMapper.selectByPrimaryKey(spuId);
+        // 判断是否已删除
+        if (spu.getIsDelete().equalsIgnoreCase("1")) { // 1 已删除
+            throw new RuntimeException("商品已删除，不允许审核");
+        }
+        spu.setStatus("1");
+        spu.setIsMarketable("1");
+        spuMapper.updateByPrimaryKeySelective(spu);
+    }
 
     /**
      * 根据 spuId 查询 goods
